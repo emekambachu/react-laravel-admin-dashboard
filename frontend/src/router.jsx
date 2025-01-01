@@ -1,4 +1,4 @@
-import {createBrowserRouter} from "react-router-dom";
+import {createBrowserRouter, Navigate} from "react-router-dom";
 
 import {Login} from "./pages/Login.jsx";
 import {Signup} from "./pages/Signup.jsx";
@@ -15,6 +15,10 @@ const router = createBrowserRouter([
     path: '/',
     element: <DefaultLayout />,
     children: [
+      {
+        path: '/',
+        element: <Navigate to="/users"/>
+      },
       {
         path: '/dashboard',
         element: <Dashboard />
