@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom";
-import {useRef} from "react";
+import {useRef, useState} from "react";
 import axiosClient from "../utils/axios-client.js";
 import {useStateContext} from "../contexts/ContextProvider.jsx";
 
@@ -11,6 +11,7 @@ export const Signup = () => {
   const passwordConfirmation = useRef();
 
   const {setUser, setToken} = useStateContext()
+  const [errors, setErrors] = useState(null);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -31,6 +32,7 @@ export const Signup = () => {
       if(response && response.status === 422){
         const errors = response.data.errors;
         console.log('Validation Errors', errors);
+        setErrors(errors);
       }
     });
 
@@ -43,10 +45,24 @@ export const Signup = () => {
         <div className="form">
 
           <h1 className="title">Signup</h1>
+
+          {
+            errors && <div className="alert alert-danger">
+              {Object.keys(errors).map(key => (
+                <p key={key}>{errors[key][0]}</p>
+              ))}
+            </div>
+          }
+
           <form onSubmit={onSubmit}>
             <div className="form-group">
               <label htmlFor="email">Name</label>
               <input ref={name} type="text" id="name" name="name" placeholder="Name"/>
+              {
+                errors && errors.name && (
+                  <div className="alert alert-danger">{errors.name[0]}</div>
+                )
+              }
             </div>
             <div className="form-group">
               <label htmlFor="email">Email</label>
@@ -57,6 +73,11 @@ export const Signup = () => {
                 name="email"
                 placeholder="Email"
               />
+              {
+                errors && errors.email && (
+                  <div className="alert alert-danger">{errors.email[0]}</div>
+                )
+              }
             </div>
             <div className="form-group">
               <label htmlFor="password">Password</label>
@@ -67,6 +88,11 @@ export const Signup = () => {
                 name="password"
                 placeholder="Password"
               />
+              {
+                errors && errors.password && (
+                  <div className="alert alert-danger">{errors.password[0]}</div>
+                )
+              }
             </div>
             <div className="form-group">
               <label htmlFor="password-confirmation">
