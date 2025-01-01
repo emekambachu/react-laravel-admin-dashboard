@@ -9,9 +9,9 @@ export const Login = () => {
     return (
         <>
           <div className="login-signup-form animated fadeInDown">
-
             <div className="form">
-              <h1 className="text-center">Login</h1>
+
+              <h1 className="title">Login</h1>
               <form onSubmit={onSubmit}>
                 <div className="form-group">
                   <label htmlFor="email">Email</label>
@@ -28,8 +28,8 @@ export const Login = () => {
                   Not Registered? <Link to="/signup">Create an account</Link>
                 </p>
               </form>
-            </div>
 
+            </div>
           </div>
         </>
     )
