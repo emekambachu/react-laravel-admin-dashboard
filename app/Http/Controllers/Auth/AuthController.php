@@ -20,7 +20,7 @@ class AuthController extends Controller
 
         $credentials = $request->validated();
         if(!Auth::attempt($credentials)){
-            return response(['message' => 'Invalid credentials, please provide a valid email and password'], 401);
+            return response(['message' => 'Invalid credentials, please provide a valid email and password'], 422);
         }
 
         $user = Auth::user();
@@ -28,7 +28,7 @@ class AuthController extends Controller
         if($user){
             $token = $user->createToken('auth_token')->plainTextToken;
         }else{
-            return response(['message' => 'Invalid credentials, please provide a valid email and password'], 401);
+            return response(['message' => 'Invalid credentials, please provide a valid email and password'], 422);
         }
 
         return response(compact('user', 'token'));

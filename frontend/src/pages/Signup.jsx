@@ -47,7 +47,8 @@ export const Signup = () => {
           <h1 className="title">Signup</h1>
 
           {
-            errors && <div className="alert alert-danger">
+            errors &&
+            <div className="alert alert-danger">
               {Object.keys(errors).map(key => (
                 <p key={key}>{errors[key][0]}</p>
               ))}

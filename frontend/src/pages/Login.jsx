@@ -8,7 +8,7 @@ export const Login = () => {
   const email = useRef();
   const password = useRef();
 
-  const {setUser, setToken} = useStateContext()
+  const {setUser, setToken} = useStateContext();
   const [errors, setErrors] = useState(null);
 
   const onSubmit = (e) => {
@@ -19,17 +19,32 @@ export const Login = () => {
       password: password.current.value,
     }
 
+    setErrors(null);
+
     axiosClient.post('/login', payload)
       .then(({data}) => {
         setUser(data.user);
         setToken(data.token);
       }).catch(err => {
-      const response = err.response;
-      if(response && response.status === 422){
-        const errors = response.data.errors;
-        console.log('Validation Errors', errors);
-        setErrors(errors);
-      }
+
+        const response = err.response;
+
+        if(response && response.status === 422){
+
+          if(response.data.errors){
+            const errors = response.data.errors;
+            console.log('Validation Errors', errors);
+            setErrors(errors);
+
+          }else{
+
+            setErrors({
+              email: ['Invalid email or password']
+            });
+          }
+
+        }
+
     });
 
     console.log('PAYLOAD', payload);
@@ -53,28 +68,35 @@ export const Login = () => {
               <form onSubmit={onSubmit}>
                 <div className="form-group">
                   <label htmlFor="email">Email</label>
-                  <input type="email" id="email" name="email" placeholder="Email"/>
-                  {
-                    errors && errors.email && (
-                      <div className="alert alert-danger">{errors.email[0]}</div>
-                    )
-                  }
+                  <input
+                    ref={email}
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Email"
+                  />
+
                 </div>
                 <div className="form-group">
                   <label htmlFor="password">Password</label>
-                  <input type="password" id="password" name="password" placeholder="Password"/>
-                  {
-                    errors && errors.password && (
-                      <div className="alert alert-danger">{errors.password[0]}</div>
-                    )
-                  }
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Password"
+                    ref={password}
+                  />
+
                 </div>
+
                 <div className="form-group">
                   <button type="submit" className="btn btn-block">Login</button>
                 </div>
+
                 <p className="message">
                   Not Registered? <Link to="/signup">Create an account</Link>
                 </p>
+
               </form>
 
             </div>
