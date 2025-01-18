@@ -67,6 +67,7 @@ input:focus {
   padding: 0.5rem 0.75rem;
   font-size: 14px;
   border-radius: 4px;
+  margin: 2px;
 }
 .btn-add {
   background-color: #00a762;

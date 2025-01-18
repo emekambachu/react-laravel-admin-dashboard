@@ -6,6 +6,7 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use Illuminate\Http\JsonResponse;
 
 class UserController extends Controller
 {
@@ -56,9 +57,20 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(User $user): JsonResponse
     {
-        $user->delete();
-        return response(null, 204);
+        try {
+            $user->delete();
+            return response()->json([
+                'success' => true,
+            ]);
+
+        }catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e
+            ], 404);
+
+        }
     }
 }

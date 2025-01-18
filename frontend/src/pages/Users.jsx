@@ -13,19 +13,41 @@ export const Users = () => {
   }, []);
 
   const getUsers = (page = null) => {
-
     setLoading(true);
 
-    axiosClient.get('/users?page=' + page)
-      .then(({data}) => {
+    axiosClient
+      .get("/users?page=" + page)
+      .then(({ data }) => {
         setUsers(data.data);
         setPaginateUsers(data.meta.links);
-      }).catch(err => {
-      console.log(err);
-    });
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
-    setLoading(false);
-  }
+  const deleteUser = (id) => {
+
+    if(!window.confirm("Are you sure you want to delete this user?")){
+      return;
+    }
+
+    axiosClient
+      .delete(`/users/${id}`)
+      .then(({ data }) => {
+        if (data?.success) {
+          setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
+        } else {
+          console.error("Failed to delete the user.");
+        }
+      })
+      .catch((err) => {
+        console.error("An error occurred while deleting the user:", err);
+      });
+  };
 
     return (
         <>
@@ -59,6 +81,7 @@ export const Users = () => {
                   <td>{user.created_at}</td>
                   <td>
                     <Link to={`/users/${user.id}`} className="btn-edit">Edit</Link>
+                    <button onClick={() => deleteUser(user.id)} className="btn-delete">Delete</button>
                   </td>
                 </tr>
               ))}
