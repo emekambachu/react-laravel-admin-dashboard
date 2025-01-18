@@ -8,6 +8,7 @@ import {NotFound} from "./pages/NotFound.jsx";
 
 import {DefaultLayout} from "./layouts/DefaultLayout.jsx";
 import {GuestLayout} from "./layouts/GuestLayout.jsx";
+import UserForm from "./pages/UserForm.jsx";
 
 const router = createBrowserRouter([
 
@@ -26,6 +27,14 @@ const router = createBrowserRouter([
       {
         path: '/users',
         element: <Users />
+      },
+      {
+        path: '/users/create',
+        element: <UserForm key="userCreate" />
+      },
+      {
+        path: '/users/:id',
+        element: <UserForm key="userUpdate" />
       },
     ]
   },
