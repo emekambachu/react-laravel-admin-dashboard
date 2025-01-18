@@ -35,6 +35,8 @@ export const Users = () => {
       return;
     }
 
+    setLoading(true);
+
     axiosClient
       .delete(`/users/${id}`)
       .then(({ data }) => {
@@ -46,7 +48,10 @@ export const Users = () => {
       })
       .catch((err) => {
         console.error("An error occurred while deleting the user:", err);
-      });
+      }).finally(() => {
+        setLoading(false);
+      }
+    );
   };
 
     return (
@@ -73,8 +78,17 @@ export const Users = () => {
                   <th>Actions</th>
                 </tr>
               </thead>
+              {
+                loading && (
+                  <tbody>
+                    <tr>
+                      <td colSpan="4" style={{textAlign: 'center'}}>Loading...</td>
+                    </tr>
+                  </tbody>
+                )
+              }
               <tbody>
-              {users && users.map(user => (
+              {users && users.map((user, index) => (
                 <tr key={user.id}>
                   <td>{user.name}</td>
                   <td>{user.email}</td>

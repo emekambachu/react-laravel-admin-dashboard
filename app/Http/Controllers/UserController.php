@@ -6,14 +6,18 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
         $users = User::query()->orderBy('id', 'desc')->paginate();
         return UserResource::collection($users);
@@ -22,7 +26,7 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreUserRequest $request)
+    public function store(StoreUserRequest $request): Application|Response|ResponseFactory
     {
         $data = $request->validated();
         $data['password'] = bcrypt($data['password']);
@@ -34,7 +38,7 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(User $user): UserResource
     {
         return new UserResource($user);
     }
@@ -43,14 +47,13 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(UpdateUserRequest $request, User $user): UserResource
     {
         $data = $request->validated();
         if (isset($data['password'])) {
             $data['password'] = bcrypt($data['password']);
         }
         $user->update($data);
-
         return new UserResource($user);
     }
 
@@ -73,4 +76,5 @@ class UserController extends Controller
 
         }
     }
+
 }

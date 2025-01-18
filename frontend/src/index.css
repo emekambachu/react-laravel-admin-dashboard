@@ -132,6 +132,14 @@ table > tbody > tr > td {
   margin-bottom: 1rem;
 }
 
+.alert-success {
+  padding: 1rem;
+  background-color: #02a802;
+  color: white;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
 .notification {
   position: fixed;
   right: 1rem;
