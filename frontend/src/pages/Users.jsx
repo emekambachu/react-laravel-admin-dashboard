@@ -1,12 +1,14 @@
 import {useEffect, useState} from "react";
 import axiosClient from "../utils/axios-client.js";
 import {Link} from "react-router-dom";
+import {useStateContext} from "../contexts/ContextProvider.jsx";
 
 export const Users = () => {
 
   const [users, setUsers] = useState([]);
   const [paginateUsers, setPaginateUsers] = useState([]);
   const [loading, setLoading] = useState(false);
+  const {setNotification} = useStateContext();
 
   useEffect(() => {
     getUsers();
@@ -42,6 +44,7 @@ export const Users = () => {
       .then(({ data }) => {
         if (data?.success) {
           setUsers((prevUsers) => prevUsers.filter((user) => user.id !== id));
+          setNotification('User deleted.');
         } else {
           console.error("Failed to delete the user.");
         }
